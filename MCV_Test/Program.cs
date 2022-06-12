@@ -2,31 +2,10 @@ using MCV_Test.Models;
 using Microsoft.EntityFrameworkCore;
 
 
-string myAllowsSpecificOrigin = "_myAllowSpecificOrigin";
-
+ 
 var builder = WebApplication.CreateBuilder(args);
 
-/*
-   builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("https://localhost:44362")
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
-                });
-            });
- */
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("_myAllowSpecificOrigin",
-        builder =>
-        builder.AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .WithOrigins()
-        );
-});
+ 
 builder.Services.AddMvc(options =>
 {
     options.EnableEndpointRouting = false;
@@ -34,7 +13,14 @@ builder.Services.AddMvc(options =>
 
 
 });
-//builder.Services.AddMvc(option => option.EnableEndpointRouting = false);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 builder.Services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions
                 .ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
@@ -66,7 +52,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseCors(myAllowsSpecificOrigin);
+app.UseCors("CorsPolicy");
 
 
 app.UseEndpoints(endpoints =>

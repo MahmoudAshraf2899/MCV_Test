@@ -1,17 +1,14 @@
-﻿using MCV_Test.DTO;
-using MCV_Test.Helpers;
-using MCV_Test.Models;
-using Microsoft.AspNetCore.Cors;
+﻿using Front.DTO;
+using Front.Helpers;
+using Front.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace MCV_Test.Controllers
+namespace Front.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("CorsPolicy")]
-
     public class DepartmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -79,7 +76,7 @@ namespace MCV_Test.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("AddDepartment")]
         public async Task<IActionResult> AddDepartment([FromForm] DepartmentDTO dto)
         {
             try
@@ -112,7 +109,7 @@ namespace MCV_Test.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDepartment(int id, [FromForm] DepartmentDTO dto)
+        public async Task<IActionResult> UpdateDepartment(int id, [FromQuery] DepartmentDTO dto)
         {
             try
             {
