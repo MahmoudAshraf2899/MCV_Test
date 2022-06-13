@@ -1,8 +1,51 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Department Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xm-12">
+
+            <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
+
+                <input class="form-control" style="width:200px;" type="text" placeholder="Add Department Name" id="add-name">
+                <input type="submit" class="btn btn-primary" style="margin-top:10px;" value="Add">
+            </form>
+
+            <div id="editForm">
+                <h3> </h3>
+                <form action="javascript:void(0);" onsubmit="updateItem()">
+                    <input type="hidden" id="edit-id">
+                    <input class="form-control" style="width:200px;" placeholder="Click on Edit" type="text" id="edit-name">
+                    <input type="submit" style="margin-top:10px;" class="btn btn-primary" value="Update">
+                    <a onclick="closeInput()" aria-label="Close">&#10060;</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-md-6 col-sm-6 col-xm-12">
+
+
+
+
+            <table class="table table-hover">
+                <thead>
+
+                    <tr style="font-family:Roboto;">
+                        <th>Name</th>
+                        <th>Total Employees</th>
+                        <th id="actions"> Actions</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="Deps"></tbody>
+            </table>
+            <p id="counter" style="font-family:Roboto; float:right;"></p>
+
+        </div>
+    </div>
 </div>
+<script src="js/site.js" asp-append-version="true"></script>
+<script type="text/javascript">getItems();</script>
+
+

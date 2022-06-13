@@ -40,7 +40,8 @@ function addItem() {
             getItems();
             addNameTextbox.value = '';
         })
-        .catch(error => console.log('error', error));
+        .catch(error => console.log('error', error))
+    alert("Name Is Required");;
 }
 
  
@@ -100,7 +101,7 @@ function closeInput() {
 function _displayCount(itemCount) {
     const name = (itemCount === 1) ? 'Department' : 'Departments';
 
-    document.getElementById('counter').innerText = `${itemCount} ${name}`;
+    document.getElementById('counter').innerText = `Total : ${itemCount} ${name}`;
 }
 
 function _displayItems(data) {
@@ -112,6 +113,8 @@ function _displayItems(data) {
     _displayCount(data.length);
 
     const button = document.createElement('button');
+       
+   
 
     data.forEach(item => {
        
@@ -119,16 +122,21 @@ function _displayItems(data) {
         let editButton = button.cloneNode(false);
         editButton.innerText = 'Edit';
         editButton.setAttribute('onclick', `displayEditForm(${item.id})`);
+        editButton.setAttribute("class", "btn btn-warning");
 
         let deleteButton = button.cloneNode(false);
         deleteButton.innerText = 'Delete';
         deleteButton.setAttribute('onclick', `deleteItem(${item.id})`);
+        deleteButton.setAttribute("class", "btn btn-danger");
 
+        let act = document.getElementById("action");
+       
         let tr = tBody.insertRow();
 
 
-        let td1 = tr.insertCell(0)
-        let textNode = document.createTextNode(item.name);
+        let td1 = tr.insertCell(0);
+        
+        let textNode = document.createTextNode(item.name);        
         td1.appendChild(textNode);
 
         let td2 = tr.insertCell(1);
@@ -137,7 +145,9 @@ function _displayItems(data) {
         
 
         let td3 = tr.insertCell(2);
+       
         td3.appendChild(editButton);
+       
 
         let td4 = tr.insertCell(3);
         td4.appendChild(deleteButton);
