@@ -11,10 +11,12 @@ namespace MCV_Test.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(ApplicationDbContext context)
+        public EmployeeController(ApplicationDbContext context, ILogger<EmployeeController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -39,8 +41,8 @@ namespace MCV_Test.Controllers
             //Dead Line Blocked me to Use Logging .. So I Left the exception Empty.
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 
@@ -65,8 +67,8 @@ namespace MCV_Test.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 
@@ -118,8 +120,8 @@ namespace MCV_Test.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 
@@ -133,49 +135,57 @@ namespace MCV_Test.Controllers
         [HttpPut("{identifier}")]
         public async Task<IActionResult> UpdateEmployee(int identifier, [FromForm] EmployeeDTO dto)
         {
-            DateTime localDate = DateTime.Now;
-            var employee = await _context.Employees
-                                           .Include(d => d.Department)
-                                           .FirstOrDefaultAsync(e => e.UniqueIdentifier == identifier);
-
-            if (employee is null)
+            try
             {
-                return NotFound($"No Employee Exist with this identifier {identifier}");
-            }
-            //Increase Number Of Employees in the new Department by 1 
-            // and decrement The Old Department by 1
-            if (employee.DepartmentId != dto.DepartmentId)
-            {
+                DateTime localDate = DateTime.Now;
+                var employee = await _context.Employees
+                                               .Include(d => d.Department)
+                                               .FirstOrDefaultAsync(e => e.UniqueIdentifier == identifier);
 
-                Department? newdepartmentSize = await _context.Departments
-                                        .Where(d => d.Id == dto.DepartmentId)
-                                        .FirstOrDefaultAsync();
-
-                Department? OlddepartmentSize = await _context.Departments
-                                      .Where(d => d.Id == employee.DepartmentId)
-                                      .FirstOrDefaultAsync();
-
-                if (newdepartmentSize is not null && OlddepartmentSize is not null)
+                if (employee is null)
                 {
-                    newdepartmentSize.NumberOfEmployees++;
-                    OlddepartmentSize.NumberOfEmployees--;
+                    return NotFound($"No Employee Exist with this identifier {identifier}");
                 }
-            }
-            if (dto.HiringDate > localDate)
-            {
-                return BadRequest("Date Cannot Be Bigger Than Today's Date !");
-            }
-            employee.HiringDate = dto.HiringDate;
-            employee.BirthDate = dto.BirthDate;
-            employee.Name = dto.Name;
-            employee.Title = dto.Title;
-            employee.DepartmentId = dto.DepartmentId;
+                //Increase Number Of Employees in the new Department by 1 
+                // and decrement The Old Department by 1
+                if (employee.DepartmentId != dto.DepartmentId)
+                {
 
-            _context.Employees.Update(employee);
-            await _context.SaveChangesAsync();
-            return Ok(employee);
+                    Department? newdepartmentSize = await _context.Departments
+                                            .Where(d => d.Id == dto.DepartmentId)
+                                            .FirstOrDefaultAsync();
+
+                    Department? OlddepartmentSize = await _context.Departments
+                                          .Where(d => d.Id == employee.DepartmentId)
+                                          .FirstOrDefaultAsync();
+
+                    if (newdepartmentSize is not null && OlddepartmentSize is not null)
+                    {
+                        newdepartmentSize.NumberOfEmployees++;
+                        OlddepartmentSize.NumberOfEmployees--;
+                    }
+                }
+                if (dto.HiringDate > localDate)
+                {
+                    return BadRequest("Date Cannot Be Bigger Than Today's Date !");
+                }
+                employee.HiringDate = dto.HiringDate;
+                employee.BirthDate = dto.BirthDate;
+                employee.Name = dto.Name;
+                employee.Title = dto.Title;
+                employee.DepartmentId = dto.DepartmentId;
+
+                _context.Employees.Update(employee);
+                await _context.SaveChangesAsync();
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex, "");
+                return BadRequest();
+            }
         }
-        
+
         /// <summary>
         /// Delete Employee
         /// </summary>
@@ -210,8 +220,8 @@ namespace MCV_Test.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 

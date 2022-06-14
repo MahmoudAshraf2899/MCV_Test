@@ -15,12 +15,13 @@ namespace MCV_Test.Controllers
     public class DepartmentController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
+        private readonly ILogger<DepartmentController> _logger;
         int totalEmployees = 0;
 
-        public DepartmentController(ApplicationDbContext context)
+        public DepartmentController(ApplicationDbContext context, ILogger<DepartmentController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -44,7 +45,9 @@ namespace MCV_Test.Controllers
             //Dead Line Blocked me to Use Logging .. So I Left the exception Empty.
             catch (Exception ex)
             {
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
+
             }
         }
 
@@ -101,7 +104,8 @@ namespace MCV_Test.Controllers
             catch (Exception ex)
             {
 
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 
@@ -132,8 +136,8 @@ namespace MCV_Test.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 
@@ -162,14 +166,10 @@ namespace MCV_Test.Controllers
             }
             catch (Exception ex)
             {
-
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
-
-
-
-
 
         /// <summary>
         /// Departments Paging By Sending Page Number and Page Size 
@@ -202,10 +202,10 @@ namespace MCV_Test.Controllers
 
 
             }
-            //Dead Line Blocked me to Use Logging .. So I Left the exception Empty.
             catch (Exception ex)
             {
-                throw;
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
         }
 
@@ -215,37 +215,41 @@ namespace MCV_Test.Controllers
         /// <param name="queryParameters"></param>
         /// <returns></returns>
         [HttpGet("FilterDepartments")]
-        public async Task<IActionResult> FilterDepartments([FromQuery] DepartmentQueryParameters  queryParameters)
+        public async Task<IActionResult> FilterDepartments([FromQuery] DepartmentQueryParameters queryParameters)
         {
-            IQueryable<Department> departments = _context.Departments;
-
-            //Filter With Number Of Employee..
-            if (queryParameters.MinNumberOfEmployee != null &&
-                queryParameters.MaxNumberOfEmployee != null)                 
+            try
             {
-                departments = departments.Where(
-                    d => d.NumberOfEmployees >= queryParameters.MinNumberOfEmployee.Value &&
-                        d.NumberOfEmployees <= queryParameters.MaxNumberOfEmployee.Value);
+                IQueryable<Department> departments = _context.Departments;
+
+                //Filter With Number Of Employee..
+                if (queryParameters.MinNumberOfEmployee != null &&
+                    queryParameters.MaxNumberOfEmployee != null)
+                {
+                    departments = departments.Where(
+                        d => d.NumberOfEmployees >= queryParameters.MinNumberOfEmployee.Value &&
+                            d.NumberOfEmployees <= queryParameters.MaxNumberOfEmployee.Value);
+                }
+
+
+
+                //Search by Department Name
+                if (!string.IsNullOrEmpty(queryParameters.Name))
+                {
+                    departments = departments.Where(
+                        d => d.Name.ToLower().Contains(queryParameters.Name.ToLower()));
+
+                }
+                departments = departments
+                                .Skip(queryParameters.Size * (queryParameters.Page - 1))
+                                .Take(queryParameters.Size);
+
+                return Ok(await departments.ToListAsync());
             }
-
-            ////Filter With Department Name
-            //if (!string.IsNullOrEmpty(queryParameters.Name))
-            //{
-            //    departments = departments.Where(d=>d.Name == queryParameters.Name);
-            //}
-
-            //Search by Department Name
-            if (!string.IsNullOrEmpty(queryParameters.Name))
+            catch (Exception ex)
             {
-                departments = departments.Where(
-                    d => d.Name.ToLower().Contains(queryParameters.Name.ToLower()));
-                    
+                _logger.LogInformation(ex, "");
+                return BadRequest();
             }
-            departments = departments
-                            .Skip(queryParameters.Size * (queryParameters.Page - 1))
-                            .Take(queryParameters.Size);
-
-            return Ok(await departments.ToListAsync());
         }
 
     }

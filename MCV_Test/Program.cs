@@ -1,18 +1,48 @@
 using MCV_Test.Models;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
-
- 
 var builder = WebApplication.CreateBuilder(args);
 
- 
+
+
+// Using Serilog For Loggin                
+var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(config)
+            .CreateLogger();
+
+try
+{
+    Log.Information("Application Starting ...");
+
+
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "The Application Failed To Start !");
+
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+//Using Serilog For Loggin        
+
 builder.Services.AddMvc(options =>
 {
     options.EnableEndpointRouting = false;
 
 
 
-});
+}); 
+//Complete Serilog Configuration.
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console()
+    .WriteTo.File("..\\MCV_Test\\Logs\\Logs.txt")); //This Path Should Exist With Path in (appSettings.json)
 
 builder.Services.AddCors(options =>
 {

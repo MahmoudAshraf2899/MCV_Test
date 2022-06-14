@@ -3,24 +3,24 @@
 }
 
 <div class="container">
-    <div class="row">
-        <div class="col-lg-5 col-md-6 col-sm-6 col-xm-12">
+    <div class="row" style="margin-top:50px;">
+        <div class="col-lg-5 col-md-6 col-sm-6 col-xm-12" style="margin-top:20px;">
             <!--Add Form-->
             <form action="javascript:void(0);" method="POST" onsubmit="addItem()">
                 <div class=row>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xm-12">
                         <input class="form-control" style="width:200px;" type="text" placeholder="Employee Name" id="add-name">
-                        <label for="BirthDate" style="font-family:Roboto;">BirthDate</label>
+                        <label for="BirthDate" style="font-family:Roboto; margin-top:20px; ">BirthDate</label>
                         <input name="BirthDate" class="form-control" style="width:200px;" type="date" id="add-birthData">
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xm-12">
                         <input class="form-control" style="width:200px;" type="text" placeholder="Employee Title" id="add-Title">
-                        <label for="HiringData" style="font-family:Roboto;">HiringData</label>
+                        <label for="HiringData" style="font-family:Roboto; margin-top:20px;">HiringData</label>
                         <input name="HiringData" class="form-control" style="width:200px;" type="date" id="add-HiringData">
                     </div>
 
                     <div class="col-lg-1 col-md-6 col-sm-6 col-xm-12">
-                        <select name="Department" id="add-DepartmentId" style="margin-top:5px;">
+                        <select name="Department" id="add-DepartmentId" style="margin-top:25px;">
                             <option value="1" style="font-family:Roboto;">HR</option>
                             <option value="4" style="font-family:Roboto;">Head Office</option>
                             <option value="14" style="font-family:Roboto;">Operations</option>
@@ -33,7 +33,9 @@
                     </div>
                 </div>
                 <input type="submit" class="btn btn-primary" style="margin-top:10px;" value="Add">
-            </form>
+
+                <hr />
+             </form>
             <!--Add Form-->
 
             <!--Edit Form-->
@@ -44,19 +46,19 @@
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xm-12">
                             <input type="hidden" id="edit-identifier">
-                            <input class="form-control" style="width:200px; margin-top:23px;" placeholder="Employee Name" type="text" id="edit-name">
+                            <input class="form-control" style="width:200px;" placeholder="Employee Name" type="text" id="edit-name">
                             <label for="BirthDate" style="font-family:Roboto; margin-top:15px;">BirthDate</label>
                             <input name="BirthDate" class="form-control" style="width:200px;" placeholder="Click on Edit" type="date" id="edit-birthData">
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xm-12">
-                            <label for="HiringData" style="font-family:Roboto; margin-top:5px;">HiringData</label>
-                            <input name="HiringData" class="form-control" style="width:200px;" type="date" id="edit-HiringData">
                             <input class="form-control" style="width:200px;" placeholder="Employee Title" type="text" id="edit-Title">
+                            <label for="HiringData" style="font-family:Roboto; margin-top:15px;">HiringData</label>
+                            <input name="HiringData" class="form-control" style="width:200px;" type="date" id="edit-HiringData">
                         </div>
 
                         <div class="col-lg-1 col-md-6 col-sm-6 col-xm-12">
-                            <select name="Department" id="edit-DepartmentId" style="margin-top:5px;">
+                            <select name="Department" id="edit-DepartmentId" style="margin-top:20px;">
                                 <option value="1" style="font-family:Roboto;">HR</option>
                                 <option value="4" style="font-family:Roboto;">Head Office</option>
                                 <option value="14" style="font-family:Roboto;">Operations</option>
@@ -96,6 +98,8 @@
     </div>
 </div>
 <script src="/js/Employee.js" asp-append-version="true"></script>
+<script src="js/site.js" asp-append-version="true"></script>
+
 <script type="text/javascript">getItems();</script>
 
 

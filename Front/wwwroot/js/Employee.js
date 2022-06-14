@@ -2,6 +2,7 @@
 const uri = 'https://localhost:44362/api/Employee';
 
 let Emps = [];
+let Deps = [];
 
 function getItems() {
     debugger;
@@ -10,6 +11,7 @@ function getItems() {
         .then(response => response.json())
         .then(data => _displayItems(data))
         .catch(error => console.error('Unable to get items.', error));
+
 
 }
 
@@ -20,7 +22,7 @@ function addItem() {
     const addTitleTextbox = document.getElementById('add-Title');
     const addHiringDataTextbox = document.getElementById('add-HiringData');
     const addDepartmentIdTextbox = document.getElementById('add-DepartmentId');
-    
+
 
     var myHeaders = new Headers();
     myHeaders.append("accept", "*/*");
@@ -51,9 +53,10 @@ function addItem() {
             addDepartmentIdTextbox.value = '';
         })
         .catch(error => console.log('error', error));
+
 }
 
- 
+
 function deleteItem(identifier) {
     debugger;
     fetch(`${uri}/${identifier}`, {
@@ -63,32 +66,32 @@ function deleteItem(identifier) {
         .catch(error => console.error('Unable to delete item.', error));
 }
 
-function displayEditForm(uniqueIdentifier ) {
-    const item = Emps.find(item => item.uniqueIdentifier === uniqueIdentifier );
-  
-    document.getElementById('edit-name').value = item.name; 
+function displayEditForm(uniqueIdentifier) {
+    const item = Emps.find(item => item.uniqueIdentifier === uniqueIdentifier);
+
+    document.getElementById('edit-name').value = item.name;
     document.getElementById('edit-Title').value = item.title;
     document.getElementById('edit-DepartmentId').value = item.departmentId;
     document.getElementById('edit-identifier').value = item.uniqueIdentifier;
     document.getElementById('editForm').style.display = 'block';
 }
 
- 
+
 
 function updateItem() {
     debugger;
 
     var myHeaders = new Headers();
     myHeaders.append("accept", "*/*");
-    
+
     var formdata = new FormData();
     const itemId = document.getElementById('edit-identifier').value;
-    formdata.append("Name", document.getElementById('edit-name').value.trim());    
+    formdata.append("Name", document.getElementById('edit-name').value.trim());
     formdata.append("BirthDate", document.getElementById('edit-birthData').value);
     formdata.append("Title", document.getElementById('edit-Title').value.trim());
     formdata.append("HiringDate", document.getElementById('edit-HiringData').value);
     formdata.append("DepartmentId", document.getElementById('edit-DepartmentId').value);
- 
+
     var requestOptions = {
         method: 'PUT',
         headers: myHeaders,
@@ -122,6 +125,8 @@ function _displayCount(itemCount) {
 function _displayItems(data) {
     console.log(data);
 
+
+    
     const tBody = document.getElementById('Emps');
     tBody.innerHTML = '';
 
@@ -144,7 +149,7 @@ function _displayItems(data) {
         deleteButton.setAttribute('onclick', `deleteItem(${item.uniqueIdentifier})`);
         deleteButton.setAttribute("class", "btn btn-danger");
 
- 
+
         let tr = tBody.insertRow();
 
 
@@ -171,9 +176,6 @@ function _displayItems(data) {
         let textNode5 = document.createTextNode(item.department.name);
         td5.appendChild(textNode5);
 
-         
-
-
         let td6 = tr.insertCell(5);
 
         td6.appendChild(editButton);
@@ -183,5 +185,7 @@ function _displayItems(data) {
         td7.appendChild(deleteButton);
     });
 
-    Emps = data;
+    Emps = data;  
+   
 }
+

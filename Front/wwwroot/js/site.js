@@ -1,5 +1,5 @@
 ﻿const uri = 'https://localhost:44362/api/Department';
-let Deps = [];
+var Deps = [];
 
 function getItems() {
     fetch(uri)
@@ -27,7 +27,7 @@ function addItem() {
         redirect: 'follow'
     };
 
-    fetch("https://localhost:44362/api/Department", requestOptions)
+    fetch(uri, requestOptions)
         .then(response => response.text())
         .then(result => console.log(result))
         .then(() => {
@@ -125,9 +125,7 @@ function _displayItems(data) {
 
         let tr = tBody.insertRow();
 
-
         let td1 = tr.insertCell(0);
-
         let textNode = document.createTextNode(item.name);
         td1.appendChild(textNode);
 
@@ -137,7 +135,6 @@ function _displayItems(data) {
 
 
         let td3 = tr.insertCell(2);
-
         td3.appendChild(editButton);
 
 
@@ -146,4 +143,11 @@ function _displayItems(data) {
     });
 
     Deps = data;
+
+ 
+
 }
+
+
+ 
+
