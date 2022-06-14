@@ -13,13 +13,24 @@ namespace Front.Controllers
             _logger = logger;
         }
 
-
-    public IActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
 
+        
+
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Employee()
+        {
+            return View();
+        }
+
+        public IActionResult Department()
         {
             return View();
         }

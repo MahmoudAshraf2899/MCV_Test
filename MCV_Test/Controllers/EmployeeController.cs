@@ -131,7 +131,7 @@ namespace MCV_Test.Controllers
         /// <param name="identifier"></param>
         /// <returns></returns>
         [HttpPut("{identifier}")]
-        public async Task<IActionResult> UpdateEmployee(int identifier, [FromQuery] EmployeeDTO dto)
+        public async Task<IActionResult> UpdateEmployee(int identifier, [FromForm] EmployeeDTO dto)
         {
             DateTime localDate = DateTime.Now;
             var employee = await _context.Employees
